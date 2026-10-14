@@ -1,0 +1,56 @@
+# ============================================================================
+#  Autonomous Trading Decision Agent —— 明文配置（单用户本地项目）
+# 所有密钥/地址均明文落盘，不做环境变量隔离。请勿提交到公开仓库。
+# ============================================================================
+
+# ---- LLM（对接阿里云百炼私有业务空间，OpenAI 兼容）----
+# ⚠️ 以下密钥字段已外置为环境变量（见 .env.example）：LLM_API_KEY / LLM_WORKSPACE_ID / LLM_BASE_URL
+#    请勿在此处填写真实密钥；loader.py 会优先用环境变量覆盖下面的占位值。
+llm:
+  intraday_model: "deepseek-v4.1-flash"        # 盘中 Fast 模型
+  weekly_model:  "deepseek-v4-pro-0813"        # 周度 Reasoning 模型
+  workspace_id:  ""   # 由环境变量 LLM_WORKSPACE_ID 注入
+  api_key:       ""   # 由环境变量 LLM_API_KEY 注入（请勿提交真实密钥）
+  base_url:      ""   # 由环境变量 LLM_BASE_URL 注入
+  temperature:   0.7
+  # 强制纯文本、禁止 markdown（沿用用户原约束）
+  clean_text:    "要求：输出纯文本，可以换行。禁止使用加粗**、标题#、斜体*、代码框`等任何markdown格式符号，仅输出干净文字。"
+
+# ---- 飞书机器人（Agent 专用，每日交割单推送）----
+# ⚠️ webhook 已外置为环境变量 FEISHU_WEBHOOK（见 .env.example），请勿填写真实地址。
+feishu:
+  webhook: ""   # 由环境变量 FEISHU_WEBHOOK 注入
+
+# ---- TRAE -> Agent Webhook 共享 secret（薄转发层与 Agent 约定同一明文）----
+# ⚠️ secret 已外置为环境变量 AGENT_SECRET（见 .env.example），请勿填写真实值。
+agent_webhook:
+  secret: ""   # 由环境变量 AGENT_SECRET 注入
+
+# ---- 代理（本地开发填代理；上线新加坡服务器置空字符串即零代理）----
+proxy: ""
+
+# ---- 交易时段（北京时间，周一至周五日内，不持仓过夜）----
+trading:
+  timezone: "Asia/Shanghai"
+  weekdays: [0, 1, 2, 3, 4]     # Python weekday(): 周一=0 ... 周五=4
+  session_start: "09:00"
+  session_end:   "22:00"
+  no_overnight_warn_minutes: 60  # 收盘前 60 分钟(即 21:00)发「不持仓过夜」指令
+
+# ---- 风险引擎（确定性参数，LLM 无权修改）----
+risk:
+  max_risk_per_trade_pct: 0.03   # 单笔最大风险 3%
+  daily_loss_stop_pct:    0.05   # 日亏损 >=5% 停手
+  consecutive_loss_stop:  5      # 连续亏损 >=5 笔降频/停手
+  atr_sl_multiplier:      1.5    # SL = entry ± 1.5*ATR
+  tp_r_multiplier:        1.5    # TP = SL 距离的 1.5R
+  max_concurrent_signals: 3
+  confidence_threshold:   0.65   # <0.65 不允许 EXECUTE
+  contract_multiplier:    100.0  #  标准手 100 oz
+
+# ---- 护栏即代码（YAML 配置化）----
+guardrails:
+  kill_switch:
+    enabled: true
+  decision:
+    allowed_actions: ["EXECUTE", "REJECT", "WAIT", "REDUCE_RISK", "OBSERVE"]

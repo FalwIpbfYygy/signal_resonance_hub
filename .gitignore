@@ -1,0 +1,30 @@
+# ===== TRAE 隐私/构建产物忽略规则 =====
+# 本仓库源码不含任何明文密钥；真实密钥放 .env（已被忽略），切勿提交。
+
+# ---- 密钥与环境（核心隐私）----
+.env
+.env.*
+!.env.example
+
+# ---- TRADING_AGENT 真实配置（已外置为环境变量；用 settings.example.yaml 作模板）----
+TRADING_AGENT/config/settings.yaml
+
+# ---- Python 缓存 / 虚拟环境 ----
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# ---- 运行产物 / 缓存数据（非源码）----
+signal_data/
+**/data_cache/
+*.log
+.workbuddy/
+*.lock
+
+# ---- IDE / 编辑器配置（个人环境，非源码）----
+.idea/
+.vscode/
