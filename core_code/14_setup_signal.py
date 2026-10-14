@@ -2102,7 +2102,7 @@ def send_test_email() -> bool:
 def _record_signal(interval: str, sig: Dict[str, Any]):
     """把 14_setup_signal 的 Setup 信号写入统一信号库（供信号共振统计）。
 
-    时间口径：trigger_k_ts 就是触发K的 close_time（毫秒），与 10_孕线实时 /
+    时间口径：trigger_k_ts 就是触发K的 close_time（毫秒），与 10_harami_realtime /
     11_paxg_engulfing 的口径一致，直接交给 signal_store 按本地时区渲染。
 
     该脚本只产出 setup_name / trigger_price / target_price，没有独立止损位 → SL 留空；

@@ -1,7 +1,7 @@
 '''
 
-启动方式：python 02_Pinbar反转_升级_v2.py
-（原始 02_Pinbar反转_升级.py 已停维护，本文件为唯一入口）
+启动方式：python 02_Pinbar_reversal_v2.py
+（原始 02_Pinbar_reversal.py 已停维护，本文件为唯一入口）
 
 === v2 → v2.1 升级（基于Price Action 公开教学 Hammer / Shooting Star 精确教学）===
 
@@ -99,7 +99,7 @@ SR_LOOKBACK = 30
 SR_TOLERANCE_PCT = 0.002
 
 # ====================== 启动命令常量 ======================
-START_CMD = "python 02_Pinbar反转_升级_v2.py"   # ★ v2.1 起为唯一入口
+START_CMD = "python 02_Pinbar_reversal_v2.py"   # ★ v2.1 起为唯一入口
 # ============================================================
 
 # ====================== v2 新增/调整参数 ======================

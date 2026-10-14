@@ -196,7 +196,7 @@ def _record_signal(sig: dict):
     """把 W/M 形态信号写入统一信号库（供信号共振统计）。
 
     时间口径说明：`confirm_time` 由 pd.to_datetime(openTime_ms, unit="ms") 得来，
-    是 **UTC 裸时间**；而其他系统（10_孕线实时 / 11_paxg_engulfing）用的是
+    是 **UTC 裸时间**；而其他系统（10_harami_realtime / 11_paxg_engulfing）用的是
     datetime.fromtimestamp() 的"系统本地时间"。直接入库会差 8 小时，
     所以这里显式按 UTC 解析成 epoch 秒再入库，由 signal_store 统一按本地时区渲染。
 

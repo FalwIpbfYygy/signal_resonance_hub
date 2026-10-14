@@ -1,27 +1,26 @@
 """
 master.py
-统一启动并管理 core_code/ 下 10 个  实时监控脚本。
+Unified launcher that monitors the real-time strategy scripts under core_code/.
 
-设计：
-- 10 个文件保持原样，master.py 不修改其中任何一行
-- 用 runpy.run_path() 把每个 .py 当作 __main__ 执行，从而触发
-  各文件里的 `if __name__ == "__main__":` 块（即用户所谓的 main 方法）
-- 每个脚本独立开一个守护线程，互不阻塞
-- 主线程负责巡检 + 接收 Ctrl+C 统一退出
+Design:
+- The individual strategy scripts are left untouched; master.py never modifies a single line of them
+- Uses runpy.run_path() to execute each .py as __main__, thereby triggering each file's
+  `if __name__ == "__main__":` block (the user's "main" method)
+- Each script runs in its own daemon thread, non-blocking
+- The main thread handles health checks and a unified Ctrl+C shutdown
 
-子进程列表（按策略内容命名）：
-  1. 01_OOPS做多.py          Larry Williams OOPS 跳空反转
-  2. 02_Pinbar反转.py        裸K Pinbar 反转
+Strategy scripts launched (named by strategy):
+  1. 01_OOPS_long.py           Larry Williams OOPS gap reversal (long)
+  2. 02_Pinbar_reversal.py     naked-bar Pinbar reversal
      02_Pinbar_v2.py
-  
-  3. 03_OBV_MA21.py          OBV 背离 + MA21 金叉/死叉
-  4. 04_RSI21背离.py         RSI(21) 顶/底背离
-  5. 05_谐波AB_CD.py         AB=CD 谐波形态
-  6. 06_TD九转.py            神奇九转 + MACD 柱过滤
-  7. 07_EMA100_HA.py         Heikin Ashi + EMA100
-  8. 08_顶分型做空.py        顶分型做空
-  9. 09_底分型做多.py        底分型做多
- 10. 10_孕线实时.py          黄金孕线实时
+  3. 03_OBV_MA21.py            OBV divergence + MA21 golden/death cross
+  4. 04_RSI21背离.py           RSI(21) top/bottom divergence
+  5. 05_harmonic_AB_CD.py      AB=CD harmonic pattern
+  6. 06_TD_nine_turn.py        TD Sequential + MACD histogram filter
+  7. 07_EMA100_HA.py           Heikin Ashi + EMA100
+  8. 08_top_fractal_short.py   top fractal short
+  9. 09_bottom_fractal_long.py bottom fractal long
+ 10. 10_harami_realtime.py     gold harami realtime
 """
 
 import os
@@ -37,20 +36,20 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # 与 10 个文件一一对应（按策略内容命名）
 SCRIPTS = [
-    "01_OOPS做多.py",
+    "01_OOPS_long.py",
 
-    "02_Pinbar反转_升级.py",
+    "02_Pinbar_reversal.py",
 
-    "05_谐波AB_CD.py",
-    "06_TD九转.py",
+    "05_harmonic_AB_CD.py",
+    "06_TD_nine_turn.py",
 
     "07_EMA100_HA.py",
     "07_EMA100_HA_v2.py",
 
-    "08_顶分型做空.py",
-    "09_底分型做多.py",
+    "08_top_fractal_short.py",
+    "09_bottom_fractal_long.py",
 
-    "10_孕线实时.py",
+    "10_harami_realtime.py",
     "13_WM.py",
     "11_paxg_engulfing.py",
     "14_setup_signal.py",
